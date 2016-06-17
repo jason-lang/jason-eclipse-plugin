@@ -1,0 +1,155 @@
+package jacaide.providers;
+
+import jacaide.core.PluginConstants;
+import jacaide.core.WsFolder;
+import jacaide.xtext.jaca.jaca.JacaModel;
+import jacaide.xtext.jaca.jaca.Workspace;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.progress.UIJob;
+
+public class NavigatorContentProvider implements ITreeContentProvider, IResourceChangeListener, IResourceDeltaVisitor {
+	private StructuredViewer viewer;
+	private final Map<IFile, WsFolder> cachedModelMap = new HashMap<IFile, WsFolder>();
+
+	public NavigatorContentProvider(){
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+	}
+	
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof IProject){
+			IProject project = (IProject)parentElement;
+			IFile jacaFile = project.getFile(PluginConstants.JACA_FILE);
+			WsFolder wsFolder = cachedModelMap.get(jacaFile);
+			
+			if (wsFolder == null){
+				updateModel(jacaFile);
+				wsFolder = cachedModelMap.get(jacaFile);
+				
+				if (wsFolder == null){
+					return new Object[0];
+				}
+			}
+			return new Object[]{wsFolder};
+		} else if (parentElement instanceof WsFolder){
+			WsFolder wsFolder = (WsFolder) parentElement;
+			return wsFolder.getWorkspaces().toArray();
+		} else if (parentElement instanceof Workspace){
+			Workspace ws = (Workspace)parentElement;
+			return ws.getArtifacts().toArray();
+		} else {
+			return null;
+		}
+	}
+	
+	private synchronized void updateModel(IFile jacaFile) {
+		if (jacaFile.exists()){
+			ResourceSet rs = new ResourceSetImpl();
+			Resource resource = rs.getResource(URI.createURI(jacaFile.getFullPath().toString()), true);
+			EObject eobject = resource.getContents().get(0);
+			JacaModel jacaModel = (JacaModel)eobject;
+			EList<Workspace> workspaces = jacaModel.getWorkspaces().getWorkspaces();
+			WsFolder wsFolder = new WsFolder();
+			
+			for (Workspace ws: workspaces){
+				wsFolder.addWorkspace(ws);
+			}
+			cachedModelMap.put(jacaFile, wsFolder);
+		} else {
+			cachedModelMap.remove(jacaFile);
+		}
+	}
+	
+	@Override
+	public Object getParent(Object element) {
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		if (element instanceof WsFolder || element instanceof Workspace){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Object[] getElements(Object inputElement) {
+		return getChildren(inputElement);
+	}
+
+	@Override
+	public void dispose() {
+		cachedModelMap.clear();
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+	}
+
+	@Override
+	public void inputChanged(Viewer aViewer, Object oldInput, Object newInput) {
+		if (oldInput != null && !oldInput.equals(newInput)){
+			cachedModelMap.clear();
+		}
+		viewer = (StructuredViewer) aViewer;
+	}
+	
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		IResourceDelta delta = event.getDelta();
+		try {
+			delta.accept(this);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public boolean visit(IResourceDelta delta) throws CoreException {
+		IResource source = delta.getResource();
+		switch (source.getType()) {
+			case IResource.ROOT:
+			case IResource.PROJECT:
+			case IResource.FOLDER:
+				return true;
+			case IResource.FILE:
+				final IFile file = (IFile) source;
+				if (PluginConstants.MAS_EXT.equalsIgnoreCase(file.getFileExtension())) {
+					updateModel(file);
+					
+					new UIJob("Update workspaces in JaCa Navigator") {
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							if (viewer != null && !viewer.getControl().isDisposed()){
+								viewer.refresh(file.getProject());
+							}
+							return Status.OK_STATUS;						
+						}
+					}.schedule();
+				}
+		}
+		return false;
+	}
+}
