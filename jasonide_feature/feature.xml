@@ -2,7 +2,7 @@
 <feature
       id="jasonide_feature"
       label="Jasonide_feature"
-      version="1.0.18.qualifier">
+      version="1.0.19.qualifier">
 
    <description url="http://jason.sf.net">
       Jason is an interpreter for an extended version of AgentSpeak First release: December 2003. Jason is distributed under LGPL (see file LICENSE in the Jason directory). For more information, please read doc/index.html in the Jason directory.

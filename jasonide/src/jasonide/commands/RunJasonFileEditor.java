@@ -1,6 +1,6 @@
 package jasonide.commands;
 
-import jason.jeditplugin.MASLauncherInfraTier;
+import jason.infra.MASLauncherInfraTier;
 import jason.mas2j.MAS2JProject;
 import jason.mas2j.parser.ParseException;
 import jason.mas2j.parser.TokenMgrError;

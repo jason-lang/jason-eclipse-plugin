@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jasonide
 Bundle-SymbolicName: jasonide;singleton:=true
-Bundle-Version: 1.0.18
+Bundle-Version: 1.0.19
 Bundle-Activator: jasonide.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

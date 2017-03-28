@@ -1,12 +1,8 @@
 package jasonide.core;
 
-import jason.jeditplugin.Config;
+import jason.util.Config;
 import jasonide.ui.ErrorDialog;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 
 public class PluginTemplates {

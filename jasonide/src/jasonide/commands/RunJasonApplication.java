@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.File;
 
-import jason.jeditplugin.MASLauncherInfraTier;
+import jason.infra.MASLauncherInfraTier;
 import jason.mas2j.MAS2JProject;
 import jason.mas2j.parser.ParseException;
 import jason.mas2j.parser.TokenMgrError;
@@ -14,7 +14,6 @@ import jasonide.ui.ErrorDialog;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
