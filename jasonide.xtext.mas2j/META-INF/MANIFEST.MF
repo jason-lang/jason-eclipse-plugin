@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: jasonide.xtext.mas2j
+Bundle-ManifestVersion: 2
+Bundle-Name: jasonide.xtext.mas2j
+Bundle-Vendor: Jason team
+Bundle-Version: 2.0.1
+Bundle-SymbolicName: jasonide.xtext.mas2j; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: jasonide.xtext.mas2j.services,
+ jasonide.xtext.mas2j.mas2j.impl,
+ jasonide.xtext.mas2j.mas2j.util,
+ jasonide.xtext.mas2j.serializer,
+ jasonide.xtext.mas2j.validation,
+ jasonide.xtext.mas2j.parser.antlr.internal,
+ jasonide.xtext.mas2j.mas2j,
+ jasonide.xtext.mas2j.parser.antlr,
+ jasonide.xtext.mas2j,
+ jasonide.xtext.mas2j.scoping,
+ jasonide.xtext.mas2j.generator
+Import-Package: org.apache.log4j

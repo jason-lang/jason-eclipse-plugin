@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: jasonide.xtext.mas2j.ide
+Bundle-ManifestVersion: 2
+Bundle-Name: jasonide.xtext.mas2j.ide
+Bundle-Vendor: Jason team
+Bundle-Version: 2.0.1
+Bundle-SymbolicName: jasonide.xtext.mas2j.ide; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: jasonide.xtext.mas2j,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.ide,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: jasonide.xtext.mas2j.ide.contentassist.antlr.internal,
+ jasonide.xtext.mas2j.ide.contentassist.antlr

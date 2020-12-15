@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: jasonide.xtext.asl.ide
+Bundle-ManifestVersion: 2
+Bundle-Name: jasonide.xtext.asl.ide
+Bundle-Vendor: Jason team
+Bundle-Version: 2.0.1
+Bundle-SymbolicName: jasonide.xtext.asl.ide; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: jasonide.xtext.asl,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.ide,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: jasonide.xtext.asl.ide.contentassist.antlr.internal,
+ jasonide.xtext.asl.ide.contentassist.antlr
