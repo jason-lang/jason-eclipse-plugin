@@ -171,7 +171,7 @@ public class RunJasonApplication extends AbstractHandler {
             MAS2JProject project = parser.mas();
             project.setDirectory(projectEclipse.getLocation().toString());
             project.setProjectFile(new File(mainFile.getLocation().toString()));
-            project.fixAgentsSrc(null);
+            project.fixAgentsSrc();
             System.out.println(" parsed successfully!\n");
             return project;
         } catch (ParseException ex) {  

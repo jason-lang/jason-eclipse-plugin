@@ -89,7 +89,7 @@ public class RunJasonFileEditor implements IEditorActionDelegate {
             //project.setDirectory(jasonFile.getProject().getLocation().toString());
             project.setDirectory(Utils.getDirectoryOfFile(jasonFile.getLocation().toString()));
             project.setProjectFile(new File(jasonFile.getLocation().toString()));
-            project.fixAgentsSrc(null);
+            project.fixAgentsSrc();
             System.out.println(" parsed successfully!\n");
             return project;
         } catch (ParseException ex) {  
